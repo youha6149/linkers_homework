@@ -73,11 +73,13 @@ def search_inverted_index(inverted_index, query):
     return set()
 
 
-# 3. 検索結果の表示
-with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
-    reader = csv.DictReader(file)
-    for idx, row in enumerate(reader, 1):
-        if idx in matching_lines:
-            print(
-                f'{row["郵便番号"]} {row["都道府県"]} {row["市区町村"]} {row["町域"]} {row["京都通り名"]} {row["字丁目"]} {row["事業所名"]} {row["事業所住所"]}'
-            )
+def display_results(csv_file_path, matching_lines):
+    """検索結果を表示"""
+    with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
+        reader = csv.DictReader(file)
+        for idx, row in enumerate(reader, 1):
+            if idx in matching_lines:
+                print(
+                    f'{row["郵便番号"]} {row["都道府県"]} {row["市区町村"]} {row["町域"]} '
+                    f'{row["京都通り名"]} {row["字丁目"]} {row["事業所名"]} {row["事業所住所"]}'
+                )
