@@ -49,32 +49,30 @@ def normalize_key(key):
 
     key_fullwidth = key_fullwidth.replace("\u3000", "_")
 
-    return key_fullwidth
+
+def save_inverted_index(filename, inverted_index):
+    """転置インデックスをpickleファイルに保存"""
+    with open(filename, "wb") as fw:
+        pickle.dump(inverted_index, fw)
 
 
-# 1. 転置インテックスの作成処理
-csv_file_path = "./address/zenkoku.csv"
-inverted_index = build_inverted_index(csv_file_path)
-normalized_dict = {normalize_key(k): v for k, v in inverted_index.items()}
-with open("inverted_index.pkl", "wb") as fw:
-    pickle.dump(inverted_index, fw)
+def load_inverted_index(filename):
+    """pickleファイルから転置インデックスを読み込む"""
+    with open(filename, "rb") as fr:
+        return pickle.load(fr)
 
-# 2. 検索処理
-query = input("検索したい地名や住所の一部を入力してください: ")
-normalized_query = normalize_key(query)
-query_ngrams = create_2gram(normalized_query)
 
-with open("inverted_index.pkl", "rb") as fr:
-    pkl_inverted_index = pickle.load(fr)
+def search_inverted_index(inverted_index, query):
+    """転置インデックスでクエリを検索"""
+    normalized_query = normalize_key(query)
+    query_ngrams = create_2gram(normalized_query)
 
-result_sets = [inverted_index.get(ngram, set()) for ngram in query_ngrams]
+    result_sets = [inverted_index.get(ngram, set()) for ngram in query_ngrams]
 
-if result_sets:
-    matching_lines = set.intersection(*result_sets)
-else:
-    matching_lines = set()
+    if result_sets:
+        return set.intersection(*result_sets)
+    return set()
 
-print(f"検索結果: {len(matching_lines)} 件")
 
 # 3. 検索結果の表示
 with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
