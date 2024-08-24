@@ -46,8 +46,7 @@ def normalize_key(key):
         )
         for char in key
     )
-
-    key_fullwidth = key_fullwidth.replace("\u3000", "_")
+    return key_fullwidth.replace("\u3000", "_")
 
 
 def save_inverted_index(filename, inverted_index):
