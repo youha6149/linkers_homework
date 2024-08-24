@@ -1,4 +1,5 @@
 import csv
+import pickle
 import unicodedata
 from collections import defaultdict
 
@@ -54,11 +55,14 @@ def normalize_key(key):
     return key_fullwidth
 
 
-query = input("検索したい地名や住所の一部を入力してください: ")
-
+# 1. 転置インテックスの作成処理
 csv_file_path = "./address/zenkoku.csv"
 inverted_index = build_inverted_index(csv_file_path)
 normalized_dict = {normalize_key(k): v for k, v in inverted_index.items()}
+with open("inverted_index.pkl", "wb") as fw:
+    pickle.dump(inverted_index, fw)
 
+# 2. 検索処理
+query = input("検索したい地名や住所の一部を入力してください: ")
 normalized_query = normalize_key(query)
 query_ngrams = create_2gram(normalized_query)
