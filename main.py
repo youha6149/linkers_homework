@@ -12,29 +12,26 @@ def create_2gram(term):
     return [term[i : i + 2] for i in range(len(term) - 1)] if term else []
 
 
-def build_inverted_index(filename):
-    """CSVファイルから転置インデックスを構築"""
+def build_inverted_index(reader):
+    """CSVリーダーから転置インデックスを構築"""
     inverted_index = defaultdict(set)
-    idx = 0
-    with open(filename, "r", encoding="shift-jis", errors="ignore") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            idx += 1
-            address_components = [
-                row["都道府県"],
-                row["市区町村"],
-                row["町域"],
-                row["京都通り名"],
-                row["字丁目"],
-                row["事業所名"],
-                row["事業所住所"],
-            ]
 
-            for component in address_components:
-                if component:
-                    ngrams = create_2gram(component)
-                    for ngram in ngrams:
-                        inverted_index[ngram].add(idx)
+    for idx, row in enumerate(reader, start=1):
+        address_components = [
+            row["都道府県"],
+            row["市区町村"],
+            row["町域"],
+            row["京都通り名"],
+            row["字丁目"],
+            row["事業所名"],
+            row["事業所住所"],
+        ]
+
+        for component in address_components:
+            if component:
+                ngrams = create_2gram(component)
+                for ngram in ngrams:
+                    inverted_index[ngram].add(idx)
 
     return inverted_index
 
