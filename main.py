@@ -1,4 +1,5 @@
 import csv
+import unicodedata
 from collections import defaultdict
 
 
@@ -37,6 +38,22 @@ def build_inverted_index(filename):
     return inverted_index
 
 
+def normalize_key(key):
+    """キーを正規化する処理を行う。文字列を全角に変換し、全角空白を"_"に置き換える"""
+    key_fullwidth = "".join(
+        (
+            unicodedata.normalize("NFKC", char)
+            if unicodedata.east_asian_width(char) in "NaH"
+            else char
+        )
+        for char in key
+    )
+
+    key_fullwidth = key_fullwidth.replace("\u3000", "_")
+
+    return key_fullwidth
+
+
 csv_file_path = "./address/zenkoku.csv"
 inverted_index = build_inverted_index(csv_file_path)
-print(inverted_index["北海"])
+normalized_dict = {normalize_key(k): v for k, v in inverted_index.items()}
