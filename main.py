@@ -54,6 +54,11 @@ def normalize_key(key):
     return key_fullwidth
 
 
+query = input("検索したい地名や住所の一部を入力してください: ")
+
 csv_file_path = "./address/zenkoku.csv"
 inverted_index = build_inverted_index(csv_file_path)
 normalized_dict = {normalize_key(k): v for k, v in inverted_index.items()}
+
+normalized_query = normalize_key(query)
+query_ngrams = create_2gram(normalized_query)
