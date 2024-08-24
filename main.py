@@ -7,11 +7,10 @@ def create_2gram(term):
     term = term.strip()
     if len(term) == 1:
         term = f"_{term}_"
-    return [term[i : i + 2] for i in range(len(term) - 1)]
+    return [term[i : i + 2] for i in range(len(term) - 1)] if term else []
 
 
 def build_inverted_index(filename):
-    # TODO: 遅すぎるので高速化
     """CSVファイルから転置インデックスを構築"""
     inverted_index = defaultdict(set)
     idx = 0
@@ -30,9 +29,10 @@ def build_inverted_index(filename):
             ]
 
             for component in address_components:
-                ngrams = create_2gram(component)
-                for ngram in ngrams:
-                    inverted_index[ngram].add(idx)
+                if component:
+                    ngrams = create_2gram(component)
+                    for ngram in ngrams:
+                        inverted_index[ngram].add(idx)
 
     return inverted_index
 
