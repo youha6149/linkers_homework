@@ -66,3 +66,15 @@ with open("inverted_index.pkl", "wb") as fw:
 query = input("検索したい地名や住所の一部を入力してください: ")
 normalized_query = normalize_key(query)
 query_ngrams = create_2gram(normalized_query)
+
+with open("inverted_index.pkl", "rb") as fr:
+    pkl_inverted_index = pickle.load(fr)
+
+result_sets = [inverted_index.get(ngram, set()) for ngram in query_ngrams]
+
+if result_sets:
+    matching_lines = set.intersection(*result_sets)
+else:
+    matching_lines = set()
+
+print(f"検索結果: {len(matching_lines)} 件")
