@@ -62,9 +62,18 @@ def search_inverted_index(
         print("該当する住所が見つかりませんでした。")
         return
 
-    with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
-        reader = csv.DictReader(file)
-        display_results(reader, matching_lines)
+    try:
+        with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
+            reader = csv.DictReader(file)
+            display_results(reader, matching_lines)
+
+    except FileNotFoundError:
+        print(f"Error: CSVファイルが見つかりません: {csv_file_path}")
+        return
+
+    except Exception as e:
+        print(f"Error: CSVファイルの読み込み中にエラーが発生しました: {e}")
+        return
 
     print(f"検索結果: {len(matching_lines)} 件")
 
