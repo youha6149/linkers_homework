@@ -21,7 +21,7 @@ def create_inverted_index(
 
 
 def search_inverted_index(
-    inverted_index_file: str = "./db/inverted_index_row_data.pkl",
+    inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
     """転置インデックスを使用して検索を行う"""
     query = input("検索したい地名や住所の一部を入力してください: ").strip()
