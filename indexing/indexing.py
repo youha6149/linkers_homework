@@ -1,7 +1,7 @@
 import pickle
 from collections import defaultdict
 
-from utils import create_2gram, normalize_key
+from utils.utils import create_2gram, normalize_key
 
 
 class InvertedIndexManager:
