@@ -1,7 +1,7 @@
 import csv
 
 from indexing import InvertedIndexManager
-from utils import create_2gram, display_results, normalize_key
+from utils import display_results
 
 
 def main():
@@ -25,10 +25,9 @@ def main():
 
     # 検索処理
     query = input("検索したい地名や住所の一部を入力してください: ")
-    query_params = [normalize_key(q) for q in create_2gram(query)]
 
     inverted_index_manager.load(inverted_index_file)
-    matching_lines = inverted_index_manager.search(query_params)
+    matching_lines = inverted_index_manager.search(query)
 
     with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
         reader = csv.DictReader(file)
