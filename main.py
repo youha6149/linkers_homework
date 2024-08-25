@@ -6,7 +6,7 @@ from utils import create_2gram, display_results, normalize_key
 
 def main():
     csv_file_path = "./address/zenkoku.csv"
-    inverted_index_file = "inverted_index.pkl"
+    inverted_index_file = "./db/inverted_index.pkl"
     inverted_index_manager = InvertedIndexManager()
     try:
 
