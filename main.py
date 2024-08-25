@@ -1,25 +1,56 @@
 import csv
+import pickle
+from multiprocessing import Pool
 from pathlib import Path
+
+import pandas as pd
 
 from indexing import InvertedIndexManager
 from utils import display_results
 
 
+def process_chunk(chunk):
+    """チャンク単位で転置インデックスを作成し、結果を返す"""
+    chunk.fillna("", inplace=True)
+    manager = InvertedIndexManager()
+    manager.build(chunk)
+    return manager.inverted_index
+
+
+def merge_inverted_indices(results):
+    """複数のインデックスをマージ"""
+    final_index = InvertedIndexManager().inverted_index
+    for index in results:
+        for key, value in index.items():
+            final_index[key].update(value)
+    return final_index
+
+
 def create_inverted_index(
     csv_file_path: str = "./address/zenkoku.csv",
     inverted_index_file: str = "./db/inverted_index.pkl",
+    chunk_size: int = 10000,
 ) -> None:
     """転置インデックスを作成してファイルに保存する"""
     try:
-        inverted_index_manager = InvertedIndexManager()
-
         if not Path(csv_file_path).exists():
             raise FileNotFoundError(f"CSVファイルが見つかりません: {csv_file_path}")
 
-        with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
-            reader = csv.DictReader(file)
-            inverted_index_manager.build(reader)
-            inverted_index_manager.save(inverted_index_file)
+        chunks = pd.read_csv(
+            csv_file_path,
+            encoding="shift-jis",
+            encoding_errors="ignore",
+            chunksize=chunk_size,
+            dtype=str,
+        )
+
+        with Pool() as pool:
+            results = pool.map(process_chunk, chunks)
+
+        final_inverted_index = merge_inverted_indices(results)
+
+        with open(inverted_index_file, "wb") as file:
+            pickle.dump(final_inverted_index, file)
 
     except Exception as e:
         print(f"Error: {e}")
