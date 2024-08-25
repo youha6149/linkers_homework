@@ -51,8 +51,10 @@ class InvertedIndexManager:
 
     def search(self, query):
         """転置インデックスでクエリを検索"""
-        # memo: queryは正規化されている前提
-        result_sets = [self.inverted_index.get(ngram, set()) for ngram in query]
+        normalized_query = normalize_key(query)
+        query_ngrams = create_2gram(normalized_query)
+
+        result_sets = [self.inverted_index.get(ngram, set()) for ngram in query_ngrams]
 
         if result_sets:
             return set.intersection(*result_sets)
