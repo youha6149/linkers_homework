@@ -12,20 +12,18 @@ class InvertedIndexManager:
         # 現状は作成済みの転置インデックスが存在しない前提
         self.inverted_index = defaultdict(set)
 
-    # TODO:csvreaderだと、柔軟性がないため、dict[str, list]を受け取るように変更
-    # この場合、変換処理を外部で行う必要があり、オーバーヘッドが発生する
-    def build(self, raw) -> None:
-        """CSVリーダーから転置インデックスを構築"""
+    def build(self, chunk) -> None:
+        """CSVのチャンクから転置インデックスを構築"""
         try:
-            for idx, row in enumerate(raw, start=1):
+            for idx, row in chunk.iterrows():
                 address_components = [
-                    row["都道府県"],
-                    row["市区町村"],
-                    row["町域"],
-                    row["京都通り名"],
-                    row["字丁目"],
-                    row["事業所名"],
-                    row["事業所住所"],
+                    row.get("都道府県", ""),
+                    row.get("市区町村", ""),
+                    row.get("町域", ""),
+                    row.get("京都通り名", ""),
+                    row.get("字丁目", ""),
+                    row.get("事業所名", ""),
+                    row.get("事業所住所", ""),
                 ]
 
                 for component in address_components:
@@ -33,7 +31,7 @@ class InvertedIndexManager:
                         normalized_component = normalize_key(component)
                         ngrams = create_2gram(normalized_component)
                         for ngram in ngrams:
-                            self.inverted_index[ngram].add(idx)
+                            self.inverted_index[ngram].add(idx + 1)
 
         except Exception as e:
             raise Exception(
