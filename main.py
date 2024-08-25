@@ -41,8 +41,18 @@ def search_inverted_index(
     try:
         inverted_index_manager.load(inverted_index_file)
 
+    except FileNotFoundError:
+        print(f"Error: 転置インデックスファイルが見つかりません: {inverted_index_file}")
+        return
+
     except Exception as e:
-        print(f"Error: 転置インデックスの読み込み中にエラーが発生しました: {e}")
+        print(
+            f"Error: 転置インデックスの読み込み中に予期しないエラーが発生しました: {e}"
+        )
+        return
+
+    except Exception as e:
+        print(f"Error: 検索処理中にエラーが発生しました: {e}")
         return
 
     matching_lines = inverted_index_manager.search(query)
