@@ -1,3 +1,5 @@
+import sys
+
 from csv_loader import load_csv
 from indexing import InvertedIndexManager
 
@@ -54,12 +56,16 @@ def search_inverted_index(
 
 
 def main():
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--create-index":
+            create_inverted_index()
 
-    # 転置インデックスの作成
-    create_inverted_index()
-
-    # 検索処理
-    search_inverted_index()
+        else:
+            print(f"Error: 不明な引数が指定されました: {sys.argv[1]}")
+            print("使用方法: main.py [--create-index]")
+            sys.exit(1)
+    else:
+        search_inverted_index()
 
 
 if __name__ == "__main__":
