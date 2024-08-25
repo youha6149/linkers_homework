@@ -51,11 +51,16 @@ def search_inverted_index(
         )
         return
 
+    try:
+        matching_lines = inverted_index_manager.search(query)
+
     except Exception as e:
         print(f"Error: 検索処理中にエラーが発生しました: {e}")
         return
 
-    matching_lines = inverted_index_manager.search(query)
+    if not matching_lines:
+        print("該当する住所が見つかりませんでした。")
+        return
 
     with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
         reader = csv.DictReader(file)
