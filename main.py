@@ -1,5 +1,4 @@
 import csv
-import pickle
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -15,15 +14,6 @@ def process_chunk(chunk):
     manager = InvertedIndexManager()
     manager.build(chunk)
     return manager.inverted_index
-
-
-def merge_inverted_indices(results):
-    """複数のインデックスをマージ"""
-    final_index = InvertedIndexManager().inverted_index
-    for index in results:
-        for key, value in index.items():
-            final_index[key].update(value)
-    return final_index
 
 
 def create_inverted_index(
@@ -47,10 +37,8 @@ def create_inverted_index(
         with Pool() as pool:
             results = pool.map(process_chunk, chunks)
 
-        final_inverted_index = merge_inverted_indices(results)
-
-        with open(inverted_index_file, "wb") as file:
-            pickle.dump(final_inverted_index, file)
+        final_inverted_index_manager = InvertedIndexManager.merge_indices(results)
+        final_inverted_index_manager.save(inverted_index_file)
 
     except Exception as e:
         print(f"Error: {e}")
