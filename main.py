@@ -2,7 +2,6 @@ import csv
 from pathlib import Path
 
 from indexing import InvertedIndexManager
-from utils import display_results
 
 
 def create_inverted_index(
@@ -27,8 +26,7 @@ def create_inverted_index(
 
 
 def search_inverted_index(
-    csv_file_path: str = "./address/zenkoku.csv",
-    inverted_index_file: str = "./db/inverted_index.pkl",
+    inverted_index_file: str = "./db/inverted_index_row_data.pkl",
 ) -> None:
     """転置インデックスを使用して検索を行う"""
     query = input("検索したい地名や住所の一部を入力してください: ").strip()
@@ -47,12 +45,11 @@ def search_inverted_index(
             print("該当する住所が見つかりませんでした。")
             return
 
-        if not Path(csv_file_path).exists():
-            raise FileNotFoundError(f"CSVファイルが見つかりません: {csv_file_path}")
-
-        with open(csv_file_path, "r", encoding="shift-jis", errors="ignore") as file:
-            reader = csv.DictReader(file)
-            display_results(reader, matching_lines)
+        for line in matching_lines:
+            print(
+                f"{line[0]} {line[1]} {line[2]} {line[3]} "
+                f"{line[4]} {line[5]} {line[6]} {line[7]}"
+            )
 
     except Exception as e:
         print(f"Error: {e}")
