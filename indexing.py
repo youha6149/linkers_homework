@@ -37,7 +37,7 @@ class InvertedIndexManager:
 
         except Exception as e:
             raise Exception(
-                f"Error: 転置インデックスの構築中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスの構築中に予期しないエラーが発生しました: {e}"
             )
 
     def save(self, filename) -> None:
@@ -51,16 +51,16 @@ class InvertedIndexManager:
                 pickle.dump(self.inverted_index, file)
 
         except ValueError as e:
-            raise ValueError(f"Error: 転置インデックスが空です: {e}")
+            raise ValueError(f"転置インデックスが空です: {e}")
 
         except FileNotFoundError:
             raise FileNotFoundError(
-                f"Error: 転置インデックスファイルが見つかりません: {filename}"
+                f"転置インデックスファイルが見つかりません: {filename}"
             )
 
         except Exception as e:
             raise Exception(
-                f"Error: 転置インデックスの保存中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスの保存中に予期しないエラーが発生しました: {e}"
             )
 
     def load(self, filename):
@@ -71,12 +71,12 @@ class InvertedIndexManager:
 
         except FileNotFoundError:
             raise FileNotFoundError(
-                f"Error: 転置インデックスファイルが見つかりません: {filename}"
+                f"転置インデックスファイルが見つかりません: {filename}"
             )
 
         except Exception as e:
             raise Exception(
-                f"Error: 転置インデックスの読み込み中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスの読み込み中に予期しないエラーが発生しました: {e}"
             )
 
     def search(self, query):
@@ -94,4 +94,4 @@ class InvertedIndexManager:
             return set()
 
         except Exception as e:
-            raise Exception(f"Error: 検索処理中に予期しないエラーが発生しました: {e}")
+            raise Exception(f"検索処理中に予期しないエラーが発生しました: {e}")
