@@ -93,3 +93,16 @@ class InvertedIndexManager:
 
         except Exception as e:
             raise Exception(f"検索処理中に予期しないエラーが発生しました: {e}")
+
+    def merge(self, other_index) -> None:
+        """他の転置インデックスをマージ"""
+        for key, value in other_index.items():
+            self.inverted_index[key].update(value)
+
+    @classmethod
+    def merge_indices(cls, indices_list):
+        """複数のインデックスをマージして新しいインデックスを返す"""
+        final_index_manager = cls()
+        for index in indices_list:
+            final_index_manager.merge(index)
+        return final_index_manager
