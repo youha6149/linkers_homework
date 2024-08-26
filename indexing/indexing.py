@@ -1,7 +1,7 @@
 import pickle
 from collections import defaultdict
 
-from utils.utils import create_2gram, normalize_key
+from utils.tokenizer import Tokenizer
 
 
 class InvertedIndexManager:
@@ -15,6 +15,7 @@ class InvertedIndexManager:
     def build(self, raw: list[dict]) -> None:
         """CSVリーダーから転置インデックスを構築"""
         try:
+            tokenizer = Tokenizer()
             for row in raw:
                 full_address = "".join(
                     filter(
@@ -33,8 +34,8 @@ class InvertedIndexManager:
                 row_data = (row["郵便番号"], full_address)
 
                 if full_address:
-                    normalized_address = normalize_key(full_address)
-                    ngrams = create_2gram(normalized_address)
+                    normalized_address = tokenizer.normalize_key(full_address)
+                    ngrams = tokenizer.create_2gram(normalized_address)
                     for ngram in ngrams:
                         self.inverted_index[ngram].add(row_data)
 
@@ -84,9 +85,10 @@ class InvertedIndexManager:
     def search(self, query: str) -> set:
         """転置インデックスでクエリを検索"""
         try:
+            tokenizer = Tokenizer()
             # memo:「大阪市梅田」のような市区町村が抜けたクエリの場合は検索結果が0件になる
-            normalized_query = normalize_key(query)
-            query_ngrams = create_2gram(normalized_query)
+            normalized_query = tokenizer.normalize_key(query)
+            query_ngrams = tokenizer.create_2gram(normalized_query)
 
             result_sets = [
                 self.inverted_index.get(ngram, set()) for ngram in query_ngrams
