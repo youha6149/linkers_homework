@@ -1,3 +1,4 @@
+import os
 import pickle
 from collections import defaultdict
 
@@ -8,33 +9,41 @@ class InvertedIndexManager:
     """転置インデックスを作成・検索を行うクラス"""
 
     def __init__(self):
-        # すでに作成済みの転置インデックスが存在する場合は読み込む
-        # 現状は作成済みの転置インデックスが存在しない前提
+        # すでに作成済みの転置インデックスが存在する場合は明示的にloadを実行して上書きする
         self.inverted_index = defaultdict(set)
 
     def build(self, raw: list[dict]) -> None:
         """CSVリーダーから転置インデックスを構築"""
+        search_keys = [
+            "都道府県",
+            "市区町村",
+            "町域",
+            "京都通り名",
+            "字丁目",
+            "事業所名",
+            "事業所住所",
+        ]
+
         try:
             tokenizer = Tokenizer()
             for row in raw:
                 full_address = "".join(
                     filter(
                         None,
-                        [
-                            row["都道府県"],
-                            row["市区町村"],
-                            row["町域"],
-                            row["京都通り名"],
-                            row["字丁目"],
-                            row["事業所名"],
-                            row["事業所住所"],
-                        ],
+                        (row[key] for key in search_keys),
                     )
                 )
                 row_data = (row["郵便番号"], full_address)
 
                 if full_address:
                     normalized_address = tokenizer.normalize_key(full_address)
+                    for part in [row[key] for key in search_keys]:
+                        if part and len(part) == 1:
+                            normalized_part = tokenizer.normalize_key(part)
+                            ngrams_part = tokenizer.create_2gram(normalized_part)
+                            for n in ngrams_part:
+                                self.inverted_index[n].add(row_data)
+
                     ngrams = tokenizer.create_2gram(normalized_address)
                     for ngram in ngrams:
                         self.inverted_index[ngram].add(row_data)
