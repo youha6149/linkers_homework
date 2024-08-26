@@ -41,10 +41,7 @@ def search_inverted_index(
             return
 
         for line in matching_lines:
-            print(
-                f"{line[0]} {line[1]} {line[2]} {line[3]} "
-                f"{line[4]} {line[5]} {line[6]} {line[7]}"
-            )
+            print(f"{line[0]} {line[1]}")
 
     except Exception as e:
         print(f"Error: {e}")
