@@ -12,8 +12,8 @@ def main():
             print(f"Error: 不明な引数が指定されました: {sys.argv[1]}")
             print("使用方法: main.py [--create-index]")
             sys.exit(1)
-    else:
-        search_inverted_index()
+
+    search_inverted_index()
 
 
 if __name__ == "__main__":
