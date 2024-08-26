@@ -12,7 +12,7 @@ class InvertedIndexManager:
         # 現状は作成済みの転置インデックスが存在しない前提
         self.inverted_index = defaultdict(set)
 
-    def build(self, raw) -> None:
+    def build(self, raw: list[dict]) -> None:
         """CSVリーダーから転置インデックスを構築"""
         try:
             for row in raw:
@@ -43,9 +43,8 @@ class InvertedIndexManager:
                 f"転置インデックスの構築中に予期しないエラーが発生しました: {e}"
             )
 
-    def save(self, filename) -> None:
+    def save(self, filename: str) -> None:
         """転置インデックスをpickleファイルに保存"""
-        # memo: self.inverted_indexが空の場合はエラーを返す想定
         try:
             if not self.inverted_index:
                 raise ValueError("inverted_index is empty")
@@ -66,7 +65,7 @@ class InvertedIndexManager:
                 f"転置インデックスの保存中に予期しないエラーが発生しました: {e}"
             )
 
-    def load(self, filename):
+    def load(self, filename: str) -> None:
         """pickleファイルから転置インデックスを読み込む"""
         try:
             with open(filename, "rb") as file:
@@ -82,9 +81,10 @@ class InvertedIndexManager:
                 f"転置インデックスの読み込み中に予期しないエラーが発生しました: {e}"
             )
 
-    def search(self, query):
+    def search(self, query: str) -> set:
         """転置インデックスでクエリを検索"""
         try:
+            # memo:「大阪市梅田」のような市区町村が抜けたクエリの場合は検索結果が0件になる
             normalized_query = normalize_key(query)
             query_ngrams = create_2gram(normalized_query)
 
