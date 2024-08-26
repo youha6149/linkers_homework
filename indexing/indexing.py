@@ -50,6 +50,8 @@ class InvertedIndexManager:
             if not self.inverted_index:
                 raise ValueError("inverted_index is empty")
 
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+
             with open(filename, "wb") as file:
                 pickle.dump(self.inverted_index, file)
 
