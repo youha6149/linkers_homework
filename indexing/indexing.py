@@ -16,23 +16,27 @@ class InvertedIndexManager:
         """CSVリーダーから転置インデックスを構築"""
         try:
             for row in raw:
-                address_components = [
-                    row["都道府県"],
-                    row["市区町村"],
-                    row["町域"],
-                    row["京都通り名"],
-                    row["字丁目"],
-                    row["事業所名"],
-                    row["事業所住所"],
-                ]
-                row_data = (row["郵便番号"], *address_components)
+                full_address = "".join(
+                    filter(
+                        None,
+                        [
+                            row["都道府県"],
+                            row["市区町村"],
+                            row["町域"],
+                            row["京都通り名"],
+                            row["字丁目"],
+                            row["事業所名"],
+                            row["事業所住所"],
+                        ],
+                    )
+                )
+                row_data = (row["郵便番号"], full_address)
 
-                for component in address_components:
-                    if component:
-                        normalized_component = normalize_key(component)
-                        ngrams = create_2gram(normalized_component)
-                        for ngram in ngrams:
-                            self.inverted_index[ngram].add(row_data)
+                if full_address:
+                    normalized_address = normalize_key(full_address)
+                    ngrams = create_2gram(normalized_address)
+                    for ngram in ngrams:
+                        self.inverted_index[ngram].add(row_data)
 
         except Exception as e:
             raise Exception(
