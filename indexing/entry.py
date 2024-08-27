@@ -12,7 +12,7 @@ def create_inverted_index(
     csv_file_path: str = "./address/zenkoku.csv",
     inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
-    """転置インデックスを作成してファイルに保存する"""
+    """転置インデックスデータを作成してファイルに保存する"""
     try:
         inverted_index_manager = InvertedIndexManager()
         downloader = CsvDownloader()
@@ -35,7 +35,7 @@ def create_inverted_index(
 def search_inverted_index(
     inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
-    """転置インデックスを使用して検索を行う"""
+    """転置インデックスデータから検索を行う"""
     try:
         query = input("検索したい地名や住所の一部を入力してください: ").strip()
 
