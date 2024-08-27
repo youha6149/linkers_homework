@@ -18,10 +18,10 @@ class Tokenizer:
             raise Exception(f"2-gramの生成中にエラーが発生しました: {e}")
 
     def normalize_key(self, key: str):
-        """キーを正規化する処理を行う。文字列を全角に変換し、全角空白を"_"に置き換え、小文字を大文字に変換する"""
+        """キーを正規化する処理を行う。文字列を全角に変換し、全角空白を"*"に置き換え、小文字を大文字に変換する"""
         try:
             key_fullwidth = jaconv.h2z(key, ascii=True, digit=True)
-            key_fullwidth = key_fullwidth.replace(" ", "_").upper()
+            key_fullwidth = key_fullwidth.replace(" ", "*").upper()
             return key_fullwidth
         except Exception as e:
             raise Exception(f"キーの正規化中にエラーが発生しました: {e}")
