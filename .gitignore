@@ -4,3 +4,7 @@ address
 refer
 old
 .venv
+db
+build
+dist
+*.spec

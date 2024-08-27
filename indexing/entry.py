@@ -1,4 +1,5 @@
 from indexing.indexing import InvertedIndexManager
+from utils.csv_downloader import CsvDownloader
 from utils.csv_loader import load_csv
 
 
@@ -9,6 +10,9 @@ def create_inverted_index(
     """転置インデックスを作成してファイルに保存する"""
     try:
         inverted_index_manager = InvertedIndexManager()
+        downloader = CsvDownloader()
+        downloader.download()
+        downloader.extract()
 
         csv_data = load_csv(csv_file_path)
 
