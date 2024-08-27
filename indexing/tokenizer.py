@@ -1,5 +1,3 @@
-import unicodedata
-
 import jaconv
 
 

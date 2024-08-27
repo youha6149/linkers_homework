@@ -2,7 +2,7 @@ import os
 import pickle
 from collections import defaultdict
 
-from utils.tokenizer import Tokenizer
+from indexing.tokenizer import Tokenizer
 
 
 class InvertedIndexManager:
