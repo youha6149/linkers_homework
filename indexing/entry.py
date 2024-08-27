@@ -1,6 +1,11 @@
+import traceback as tb
+
 from indexing.indexing import InvertedIndexManager
+from log.logger import LoggerSetup
 from utils.csv_downloader import CsvDownloader
 from utils.csv_loader import load_csv
+
+logger = LoggerSetup().get_logger()
 
 
 def create_inverted_index(
@@ -20,7 +25,10 @@ def create_inverted_index(
         inverted_index_manager.save(inverted_index_file)
 
     except Exception as e:
-        print(f"Error: {e}")
+        error_message = f"Error: 検索値による不備以外のエラーは管理者にご連絡いただければ幸いです。\n{e}"
+        print(error_message)
+        logger.error(error_message)
+        logger.error(tb.format_exc())
         return
 
 
@@ -28,27 +36,28 @@ def search_inverted_index(
     inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
     """転置インデックスを使用して検索を行う"""
-    query = input("検索したい地名や住所の一部を入力してください: ").strip()
-
-    if not query:
-        print("Error: クエリが空です。適切な地名や住所を入力してください。")
-        return
-
-    inverted_index_manager = InvertedIndexManager()
-
     try:
+        query = input("検索したい地名や住所の一部を入力してください: ").strip()
+
+        if not query:
+            raise ValueError("クエリが空です。適切な地名や住所を入力してください。")
+
+        inverted_index_manager = InvertedIndexManager()
+
         inverted_index_manager.load(inverted_index_file)
         matching_lines = inverted_index_manager.search(query)
 
         if not matching_lines:
-            print("該当する住所が見つかりませんでした。")
-            return
+            raise ValueError("該当する住所が見つかりませんでした。")
 
         for line in matching_lines:
             print(f"{line[0]} {line[1]}")
 
     except Exception as e:
-        print(f"Error: {e}")
+        error_message = f"Error: 検索値による不備以外のエラーは管理者にご連絡いただければ幸いです。\n{e}"
+        print(error_message)
+        logger.error(error_message)
+        logger.error(tb.format_exc())
         return
 
     print(f"検索結果: {len(matching_lines)} 件")
