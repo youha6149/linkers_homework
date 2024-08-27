@@ -11,6 +11,7 @@ class CsvDownloader:
         self.zip_content = None
 
     def download(self):
+        """全国csvのzipファイルをダウンロードする"""
         try:
             with requests.get(self.url) as response:
                 response.raise_for_status()
@@ -30,6 +31,7 @@ class CsvDownloader:
             )
 
     def extract(self, csv_save_to: str = "./address"):
+        """全国csvのzipファイルを解凍する"""
         try:
             if self.zip_content is None:
                 raise ValueError("ダウンロードが実行されていません。")

@@ -12,7 +12,7 @@ def create_inverted_index(
     csv_file_path: str = "./address/zenkoku.csv",
     inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
-    """転置インデックスを作成してファイルに保存する"""
+    """転置インデックスデータを作成してファイルに保存する"""
     try:
         inverted_index_manager = InvertedIndexManager()
         downloader = CsvDownloader()
@@ -25,7 +25,7 @@ def create_inverted_index(
         inverted_index_manager.save(inverted_index_file)
 
     except Exception as e:
-        error_message = f"Error: 検索値による不備以外のエラーは管理者にご連絡いただければ幸いです。\n{e}"
+        error_message = f"Error: 検索値不備以外のエラーは管理者までご連絡いただければ幸いです。\n{e}"
         print(error_message)
         logger.error(error_message)
         logger.error(tb.format_exc())
@@ -35,7 +35,7 @@ def create_inverted_index(
 def search_inverted_index(
     inverted_index_file: str = "./db/inverted_index.pkl",
 ) -> None:
-    """転置インデックスを使用して検索を行う"""
+    """転置インデックスデータから検索を行う"""
     try:
         query = input("検索したい地名や住所の一部を入力してください: ").strip()
 

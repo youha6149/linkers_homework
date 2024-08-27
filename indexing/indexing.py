@@ -6,14 +6,14 @@ from indexing.tokenizer import Tokenizer
 
 
 class InvertedIndexManager:
-    """転置インデックスを作成・検索を行うクラス"""
+    """転置インデックスを作成・保存・読込・検索を行うクラス"""
 
     def __init__(self):
-        # すでに作成済みの転置インデックスが存在する場合は明示的にloadを実行して上書きする
+        # memo: すでに作成済みの転置インデックスが存在する場合は明示的にloadを実行して上書きする
         self.inverted_index = defaultdict(set)
 
     def build(self, raw: list[dict]) -> None:
-        """CSVリーダーから転置インデックスを構築"""
+        """CSVのリスト辞書から転置インデックスを構築"""
         search_keys = [
             "都道府県",
             "市区町村",
@@ -50,14 +50,16 @@ class InvertedIndexManager:
 
         except Exception as e:
             raise Exception(
-                f"転置インデックスの構築中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスデータの構築中に予期しないエラーが発生しました: {e}"
             )
 
     def save(self, filename: str) -> None:
         """転置インデックスをpickleファイルに保存"""
         try:
             if not self.inverted_index:
-                raise ValueError("inverted_index is empty")
+                raise ValueError(
+                    "転置インデックスデータが空です。\n転置インデックスファイルが存在する場合、loadメソッドを実行してください。"
+                )
 
             os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -65,7 +67,7 @@ class InvertedIndexManager:
                 pickle.dump(self.inverted_index, file)
 
         except ValueError as e:
-            raise ValueError(f"転置インデックスが空です: {e}")
+            raise ValueError(e)
 
         except FileNotFoundError:
             raise FileNotFoundError(
@@ -74,11 +76,11 @@ class InvertedIndexManager:
 
         except Exception as e:
             raise Exception(
-                f"転置インデックスの保存中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスデータの保存中に予期しないエラーが発生しました: {e}"
             )
 
     def load(self, filename: str) -> None:
-        """pickleファイルから転置インデックスを読み込む"""
+        """pickleファイルから転置インデックスデータを読み込む"""
         try:
             with open(filename, "rb") as file:
                 self.inverted_index = pickle.load(file)
@@ -90,11 +92,11 @@ class InvertedIndexManager:
 
         except Exception as e:
             raise Exception(
-                f"転置インデックスの読み込み中に予期しないエラーが発生しました: {e}"
+                f"転置インデックスファイルの読み込み中に予期しないエラーが発生しました: {e}"
             )
 
     def search(self, query: str) -> set:
-        """転置インデックスでクエリを検索"""
+        """クエリをトークン化し、転置インデックスから検索"""
         try:
             tokenizer = Tokenizer()
             # memo:「大阪市梅田」のような市区町村が抜けたクエリの場合は検索結果が0件になる
