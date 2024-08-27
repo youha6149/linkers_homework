@@ -54,7 +54,7 @@ def search_inverted_index(
             print(f"{line[0]} {line[1]}")
 
     except Exception as e:
-        error_message = f"Error: 検索値による不備以外のエラーは管理者にご連絡いただければ幸いです。\n{e}"
+        error_message = f"Error: 検索値不備以外のエラーは管理者までご連絡いただければ幸いです。\n{e}"
         print(error_message)
         logger.error(error_message)
         logger.error(tb.format_exc())
