@@ -12,16 +12,9 @@ class CsvDownloader:
 
     def download(self):
         try:
-            response = requests.get(self.url, stream=True)
-            response.raise_for_status()
-
-            buffer = io.BytesIO()
-
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    buffer.write(chunk)
-
-            self.zip_content = buffer.getvalue()
+            with requests.get(self.url) as response:
+                response.raise_for_status()
+                self.zip_content = response.content
 
         except requests.exceptions.HTTPError as http_err:
             raise requests.exceptions.HTTPError(f"HTTPエラーが発生しました: {http_err}")
@@ -30,6 +23,7 @@ class CsvDownloader:
             raise requests.exceptions.RequestException(
                 f"リクエスト例外が発生しました: {req_err}"
             )
+
         except Exception as err:
             raise Exception(
                 f"全国csvをDL処理実行中に予期せぬエラーが発生しました: {err}"
@@ -41,17 +35,15 @@ class CsvDownloader:
                 raise ValueError("ダウンロードが実行されていません。")
 
             with zipfile.ZipFile(io.BytesIO(self.zip_content)) as zip_file:
-                zip_file_names = zip_file.namelist()
-
                 os.makedirs(csv_save_to, exist_ok=True)
 
-                for file_name in zip_file_names:
+                for file_name in zip_file.namelist():
                     if file_name.endswith(".csv"):
                         with zip_file.open(file_name) as source:
-                            with open(
-                                os.path.join(csv_save_to, os.path.basename(file_name)),
-                                "wb",
-                            ) as target:
+                            file_path = os.path.join(
+                                csv_save_to, os.path.basename(file_name)
+                            )
+                            with open(file_path, "wb") as target:
                                 target.write(source.read())
 
         except zipfile.BadZipFile as zip_err:
