@@ -13,5 +13,6 @@ COPY requirements.txt .
 RUN . venv/bin/activate && pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
-COPY ./indexing/ .
-COPY ./utils/ .
+COPY indexing/*py ./indexing/
+COPY utils/*py ./utils/
+COPY log/*py ./log/
