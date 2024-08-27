@@ -3,7 +3,7 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    python3-venv  # venvを使うために必要なパッケージ
+    python3-venv
 
 WORKDIR /app
 
