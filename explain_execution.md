@@ -1,5 +1,11 @@
 ## 実行手順
 
+## Github リポジトリ
+
+- <https://github.com/youha6149/linkers_homework>
+
+- githubからデータを取得する場合、releaseから`main_mac`をダウンロードし、[項目3](#3-実行ファイルを実行)以降を参考に実行してください
+
 ### 1. zipファイルの解凍
 
 zipファイルは以下のような構成になっています。

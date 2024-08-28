@@ -1,7 +1,3 @@
-## Github リポジトリ
-
-- <https://github.com/youha6149/linkers_homework>
-
 ## 基本設計
 
 ### シーケンス図
