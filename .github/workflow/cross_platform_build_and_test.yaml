@@ -1,0 +1,166 @@
+name: Cross-Platform Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: コードのチェックアウト
+        uses: actions/checkout@v2
+
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12.4'
+
+      - name: 仮想環境の作成
+        run: python -m venv venv
+
+      - name: 仮想環境のアクティブ化と依存パッケージのインストール
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: PyInstallerで実行ファイルの作成
+        run: pyinstaller --onefile main.py --name main_ubuntu
+
+      - name: 実行ファイルをアーティファクトとしてアップロード
+        uses: actions/upload-artifact@v2
+        with:
+          name: ubuntu-main
+          path: dist/main_ubuntu
+
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    needs: build-ubuntu
+    steps:
+      - name: 実行ファイルのダウンロード
+        uses: actions/download-artifact@v2
+        with:
+          name: ubuntu-main
+
+      - name: 実行ファイルのテスト
+        run: |
+          echo "渋谷" | ./dist/main_ubuntu
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: コードのチェックアウト
+        uses: actions/checkout@v2
+
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12.4'
+
+      - name: 仮想環境の作成
+        run: python -m venv venv
+
+      - name: 仮想環境のアクティブ化と依存パッケージのインストール
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: PyInstallerで実行ファイルの作成
+        run: pyinstaller --onefile main.py --name main_mac
+
+      - name: 実行ファイルをアーティファクトとしてアップロード
+        uses: actions/upload-artifact@v2
+        with:
+          name: macos-main
+          path: dist/main_mac
+
+  test-mac:
+    runs-on: macos-latest
+    needs: build-mac
+    steps:
+      - name: 実行ファイルのダウンロード
+        uses: actions/download-artifact@v2
+        with:
+          name: macos-main
+
+      - name: 実行ファイルのテスト
+        run: |
+          echo "渋谷" | ./dist/main_mac
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: コードのチェックアウト
+        uses: actions/checkout@v2
+
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12.4'
+
+      - name: 仮想環境のアクティブ化と依存パッケージのインストール (Windows)
+        run: |
+          venv\Scripts\activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: PyInstallerで実行ファイルの作成
+        run: pyinstaller --onefile main.py --name main_windows
+
+      - name: 実行ファイルをアーティファクトとしてアップロード
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-main
+          path: dist\main_windows.exe
+
+  test-windows:
+    runs-on: windows-latest
+    needs: build-windows
+    steps:
+      - name: 実行ファイルのダウンロード
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-main
+
+      - name: 実行ファイルのテスト
+        run: |
+          echo 渋谷 | .\dist\main_windows.exe
+
+  create-zip:
+    runs-on: ubuntu-latest
+    needs: [build-ubuntu, build-mac, build-windows]
+    steps:
+      - name: アーティファクトのダウンロード (Ubuntu)
+        uses: actions/download-artifact@v2
+        with:
+          name: ubuntu-main
+          path: artifacts/ubuntu
+
+      - name: アーティファクトのダウンロード (macOS)
+        uses: actions/download-artifact@v2
+        with:
+          name: macos-main
+          path: artifacts/macos
+
+      - name: アーティファクトのダウンロード (Windows)
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-main
+          path: artifacts/windows
+
+      - name: ZIPファイルの作成
+        run: zip -r all-platforms.zip artifacts/
+
+      - name: ZIPファイルをアーティファクトとしてアップロード
+        uses: actions/upload-artifact@v2
+        with:
+          name: all-platforms
+          path: all-platforms.zip
