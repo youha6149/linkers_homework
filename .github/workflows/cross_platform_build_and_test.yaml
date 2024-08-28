@@ -32,7 +32,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: PyInstallerで実行ファイルの作成
-        run: pyinstaller --onefile main.py --name main_ubuntu
+        run: |
+          source venv/bin/activate
+          pyinstaller --onefile main.py --name main_ubuntu
 
       - name: 実行ファイルをアーティファクトとしてアップロード
         uses: actions/upload-artifact@v2
@@ -74,7 +76,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: PyInstallerで実行ファイルの作成
-        run: pyinstaller --onefile main.py --name main_mac
+        run: |
+          source venv/bin/activate
+          pyinstaller --onefile main.py --name main_ubuntu
 
       - name: 実行ファイルをアーティファクトとしてアップロード
         uses: actions/upload-artifact@v2
@@ -105,15 +109,20 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.12.4'
+      
+      - name: 仮想環境の作成
+        run: python -m venv venv
 
       - name: 仮想環境のアクティブ化と依存パッケージのインストール (Windows)
         run: |
-          venv\Scripts\activate
+          .\venv\Scripts\Activate.ps1
           pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: PyInstallerで実行ファイルの作成
-        run: pyinstaller --onefile main.py --name main_windows
+        run: |
+          .\venv\Scripts\Activate.ps1
+          pyinstaller --onefile main.py --name main_windows
 
       - name: 実行ファイルをアーティファクトとしてアップロード
         uses: actions/upload-artifact@v2
