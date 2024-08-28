@@ -1,9 +1,14 @@
+import io
+import sys
 import traceback as tb
 
 from indexing.indexing import InvertedIndex
 from log.logger import LoggerSetup
 from utils.csv_downloader import CsvDownloader
 from utils.csv_loader import load_csv
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
 logger = LoggerSetup().get_logger()
 
