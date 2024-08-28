@@ -1,71 +1,68 @@
 ## 実行手順
 
 ### 1. zipファイルの解凍
+
 zipファイルは以下のような構成になっています。
 
 ```
 dist
 ┗ main_mac
-┗ main_windows.exe
 ┗ main_ubuntu
 picture
 ┗ ドキュメントで利用する画像
+source
+┗ linkers_homework
+    ┗ ソースコード
 explain_execution.md
 explain_technology.md
+explain_execution.pdf
+explain_technology.pdf
 ```
 
 ### 2. 環境別の実行ファイルを任意のディレクトリにコピー
+
 1. macの場合
     - dist/main_mac
 
-2. windowsの場合([※ベータ版](#注意))
-    - dist/main_windows.exe
-
-3. ubuntuの場合
+2. ubuntuの場合
     - dist/main_ubuntu
 
 ### 3. 実行ファイルを実行
+
 ※ 初回実行時はcsvのダウンロードと検索用ファイルの作成のため引数なしで実行してください
+
 1. macの場合
+
     ```
     ./main_mac
     ```
 
-2. windowsの場合([※ベータ版](#注意))
-    ```
-    ./main_windows.exe
-    ```
+2. ubuntuの場合
 
-3. ubuntuの場合
     ```
     main_ubuntu
     ```
----
 
-実行すると以下のように表示されるので検索値を入力する
+実行すると以下のように表示されるので検索値を入力する(例: 渋谷と入力)
 ![入力画面](./picture/入力画面.png)
-![検索値](./picture/検索値.png)
 
-出力結果:
+出力結果例:
 ![検索結果](./picture/検索結果.png)
 
 ### 4. ２回目以降で全国.jpのcsvの更新が必要ない場合
-`--search-only`という引数をつけて実行してください
+
+以下の引数を入力することで、検索処理のみが行われます。
+
+`--search-only`
 
 1. macの場合
+
     ```
     ./main_mac --search-only
     ```
 
-2. windowsの場合([※ベータ版](#注意))
-    ```
-    ./main_windows.exe --search-only
-    ```
+2. ubuntuの場合
 
-3. ubuntuの場合
     ```
     main_ubuntu --search-only
     ```
-
-### ※注意
-Windows版のみ、実行中に不安定な挙動（コマンドプロンプトが落ちるなど）が発生する可能性があります。
