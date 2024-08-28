@@ -78,7 +78,7 @@ jobs:
       - name: PyInstallerで実行ファイルの作成
         run: |
           source venv/bin/activate
-          pyinstaller --onefile main.py --name main_ubuntu
+          pyinstaller --onefile main.py --name main_mac
 
       - name: 実行ファイルをアーティファクトとしてアップロード
         uses: actions/upload-artifact@v2
