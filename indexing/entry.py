@@ -1,6 +1,6 @@
 import traceback as tb
 
-from indexing.indexing import InvertedIndexManager
+from indexing.indexing import InvertedIndex
 from log.logger import LoggerSetup
 from utils.csv_downloader import CsvDownloader
 from utils.csv_loader import load_csv
@@ -14,15 +14,15 @@ def create_inverted_index(
 ) -> None:
     """転置インデックスデータを作成してファイルに保存する"""
     try:
-        inverted_index_manager = InvertedIndexManager()
+        inverted_index = InvertedIndex()
         downloader = CsvDownloader()
         downloader.download()
         downloader.extract()
 
         csv_data = load_csv(csv_file_path)
 
-        inverted_index_manager.build(csv_data)
-        inverted_index_manager.save(inverted_index_file)
+        inverted_index.build(csv_data)
+        inverted_index.save(inverted_index_file)
 
     except Exception as e:
         error_message = f"Error: 検索値不備以外のエラーは管理者までご連絡いただければ幸いです。\n{e}"
@@ -42,10 +42,10 @@ def search_inverted_index(
         if not query:
             raise ValueError("クエリが空です。適切な地名や住所を入力してください。")
 
-        inverted_index_manager = InvertedIndexManager()
+        inverted_index = InvertedIndex()
 
-        inverted_index_manager.load(inverted_index_file)
-        matching_lines = inverted_index_manager.search(query)
+        inverted_index.load(inverted_index_file)
+        matching_lines = inverted_index.search(query)
 
         if not matching_lines:
             raise ValueError("該当する住所が見つかりませんでした。")

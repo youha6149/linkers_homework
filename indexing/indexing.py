@@ -5,7 +5,7 @@ from collections import defaultdict
 from indexing.tokenizer import Tokenizer
 
 
-class InvertedIndexManager:
+class InvertedIndex:
     """転置インデックスを作成・保存・読込・検索を行うクラス"""
 
     def __init__(self):
