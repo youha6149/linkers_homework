@@ -53,7 +53,7 @@ jobs:
 
       - name: 実行ファイルのテスト
         run: |
-          echo "渋谷" | ./dist/main_ubuntu
+          echo "渋谷" | ./main_ubuntu
 
   build-mac:
     runs-on: macos-latest
@@ -97,7 +97,7 @@ jobs:
 
       - name: 実行ファイルのテスト
         run: |
-          echo "渋谷" | ./dist/main_mac
+          echo "渋谷" | ./main_mac
 
   build-windows:
     runs-on: windows-latest
@@ -141,7 +141,7 @@ jobs:
 
       - name: 実行ファイルのテスト
         run: |
-          echo 渋谷 | .\dist\main_windows.exe
+          echo 渋谷 | .\main_windows.exe
 
   create-zip:
     runs-on: ubuntu-latest
