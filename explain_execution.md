@@ -18,7 +18,7 @@ explain_technology.md
 1. macの場合
     - dist/main_mac
 
-2. windowsの場合
+2. windowsの場合([※ベータ版](#注意))
     - dist/main_windows.exe
 
 3. ubuntuの場合
@@ -31,7 +31,7 @@ explain_technology.md
     ./main_mac
     ```
 
-2. windowsの場合
+2. windowsの場合([※ベータ版](#注意))
     ```
     ./main_windows.exe
     ```
@@ -57,7 +57,7 @@ explain_technology.md
     ./main_mac --search-only
     ```
 
-2. windowsの場合
+2. windowsの場合([※ベータ版](#注意))
     ```
     ./main_windows.exe --search-only
     ```
@@ -66,3 +66,6 @@ explain_technology.md
     ```
     main_ubuntu --search-only
     ```
+
+### ※注意
+Windows版のみ、実行中に不安定な挙動（コマンドプロンプトが落ちるなど）が発生する可能性があります。
