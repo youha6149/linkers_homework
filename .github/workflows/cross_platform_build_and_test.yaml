@@ -51,6 +51,9 @@ jobs:
         with:
           name: ubuntu-main
 
+      - name: 実行権限の追加
+        run: chmod +x ./main_ubuntu
+
       - name: 実行ファイルのテスト
         run: |
           echo "渋谷" | ./main_ubuntu
@@ -95,6 +98,9 @@ jobs:
         with:
           name: macos-main
 
+      - name: 実行権限の追加
+        run: chmod +x ./main_mac
+
       - name: 実行ファイルのテスト
         run: |
           echo "渋谷" | ./main_mac
@@ -138,6 +144,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows-main
+      
+      - name: コマンドプロンプトのエンコーディングをUTF-8に変更
+        run: chcp 65001
 
       - name: 実行ファイルのテスト
         run: |
