@@ -7,7 +7,6 @@ zipファイルは以下のような構成になっています。
 ```
 dist
 ┗ main_mac
-┗ main_ubuntu
 picture
 ┗ ドキュメントで利用する画像
 source
@@ -21,28 +20,20 @@ explain_technology.pdf
 
 ### 2. 環境別の実行ファイルを任意のディレクトリにコピー
 
-1. macの場合
-    - dist/main_mac
-
-2. ubuntuの場合
-    - dist/main_ubuntu
+    dist/main_mac
 
 ### 3. 実行ファイルを実行
 
 ※ 初回実行時はcsvのダウンロードと検索用ファイルの作成のため引数なしで実行してください
 
-1. macの場合
-
     ```
+    chmod +x ./main_mac
+    # 対象ファイルの隔離属性を削除し永続的に実行できるようにするコマンド
+    xattr -d com.apple.quarantine ./main_mac
     ./main_mac
     ```
 
-2. ubuntuの場合
-
-    ```
-    main_ubuntu
-    ```
-
+実行には10秒程度かかります。
 実行すると以下のように表示されるので検索値を入力する(例: 渋谷と入力)
 ![入力画面](./picture/入力画面.png)
 
@@ -55,14 +46,7 @@ explain_technology.pdf
 
 `--search-only`
 
-1. macの場合
-
     ```
+    # 前述の`xattr -d com.apple.quarantine ./main_mac`を実行していれば問題なく稼働する
     ./main_mac --search-only
-    ```
-
-2. ubuntuの場合
-
-    ```
-    main_ubuntu --search-only
     ```
