@@ -15,9 +15,8 @@ dist
 ┗ main_mac
 picture
 ┗ ドキュメントで利用する画像
-source
-┗ linkers_homework
-    ┗ ソースコード
+linkers_homework-1.0.0
+  ┗ ソースコード
 explain_execution.md
 explain_technology.md
 explain_execution.pdf
